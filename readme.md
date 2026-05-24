@@ -4,7 +4,7 @@ Full-stack client dashboard application for managing clients, projects, and invo
 
 ---
 
-## 🧠 Project Overview
+## Project Overview
 
 This application is designed for freelance/business workflow management:
 
@@ -15,7 +15,7 @@ This application is designed for freelance/business workflow management:
 
 ---
 
-## ⚙️ Tech Stack
+## Tech Stack
 
 | Layer    | Stack                          |
 | -------- | ------------------------------ |
@@ -26,7 +26,7 @@ This application is designed for freelance/business workflow management:
 
 ---
 
-## 📁 Project Structure
+## Project Structure
 
 sp-web-solutions-client-dashboard/
 ├── frontend/
@@ -56,9 +56,9 @@ sp-web-solutions-client-dashboard/
 
 ---
 
-## 🧱 Current Status
+## Current Status
 
-### ✅ Completed
+### Completed
 - Project initialized
 - Git repository created
 - Full-stack folder scaffold created
@@ -66,13 +66,13 @@ sp-web-solutions-client-dashboard/
 - `/health` endpoint working
 - Development environment stable
 
-### 🚧 In Progress
+### In Progress
 - Backend foundation setup (Phase 3 complete)
 - Preparing authentication system (Phase 4 next)
 
 ---
 
-## 🗄️ Database Design (Planned)
+## Database Design (Planned)
 
 ### Clients
 - id
@@ -100,7 +100,7 @@ sp-web-solutions-client-dashboard/
 
 ---
 
-## 🚀 Next Steps
+## Next Steps
 
 - Build backend authentication (JWT + bcrypt)
 - Create users table (Admin / Client roles)
@@ -110,7 +110,7 @@ sp-web-solutions-client-dashboard/
 
 ---
 
-## 📌 Notes
+## Notes
 
 - Backend runs on `http://localhost:5000`
 - Frontend will run on `http://localhost:5173`
