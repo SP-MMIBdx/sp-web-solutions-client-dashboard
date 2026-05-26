@@ -34,22 +34,22 @@ This application is designed as a lightweight SaaS-style business tool for freel
 sp-web-solutions-client-dashboard/
 │
 ├── frontend/
-│ └── src/
-│ ├── components/
-│ ├── pages/
-│ ├── services/
-│ ├── context/
-│ └── hooks/
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       ├── services/
+│       ├── context/
+│       └── hooks/
 │
 ├── backend/
-│ ├── routes/
-│ ├── controllers/
-│ ├── middleware/
-│ ├── config/
-│ ├── utils/
-│ └── prisma/
-│ ├── schema.prisma
-│ └── migrations/
+│   ├── routes/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── config/
+│   ├── utils/
+│   └── prisma/
+│       ├── schema.prisma
+│       └── migrations/
 │
 ├── .gitignore
 └── README.md
