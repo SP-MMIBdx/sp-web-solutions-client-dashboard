@@ -4,31 +4,35 @@ Full-stack client dashboard application for managing clients, projects, and invo
 
 ---
 
-## Project Overview
+## 📌 Project Overview
 
-This application is designed for freelance/business workflow management:
+This application is designed as a lightweight SaaS-style business tool for freelancers and agencies:
 
 - Client management
 - Project tracking
-- Invoice generation and status tracking
+- Invoice generation & payment tracking
 - Role-based access (Admin / Client)
+- Scalable backend architecture (REST API + PostgreSQL)
 
 ---
 
-## Tech Stack
+## ⚙️ Tech Stack
 
 | Layer    | Stack                          |
-| -------- | ------------------------------ |
+|----------|------------------------------|
 | Frontend | React, Vite, Tailwind CSS     |
 | Backend  | Node.js, Express              |
-| Database | PostgreSQL (SQL-based system) |
+| Database | PostgreSQL (via Prisma ORM)   |
+| ORM      | Prisma                        |
 | Auth     | JWT + bcrypt                  |
 
 ---
 
-## Project Structure
+## 📁 Project Structure
+
 
 sp-web-solutions-client-dashboard/
+│
 ├── frontend/
 │ └── src/
 │ ├── components/
@@ -40,79 +44,160 @@ sp-web-solutions-client-dashboard/
 ├── backend/
 │ ├── routes/
 │ ├── controllers/
-│ ├── models/
 │ ├── middleware/
 │ ├── config/
-│ └── utils/
-│
-├── database/
-│ ├── schema.sql
+│ ├── utils/
+│ └── prisma/
+│ ├── schema.prisma
 │ └── migrations/
 │
 ├── .gitignore
 └── README.md
 
 
-
 ---
 
-## Current Status
+## 🚀 Current Status
 
-### Completed
+### ✅ Completed (Phase 0–3)
+
 - Project initialized
 - Git repository created
 - Full-stack folder scaffold created
-- Backend Express server running
+- Node.js environment configured
+- Express backend running
 - `/health` endpoint working
-- Development environment stable
-
-### In Progress
-- Backend foundation setup (Phase 3 complete)
-- Preparing authentication system (Phase 4 next)
+- PostgreSQL installed and configured locally
+- Database created: `spwebsolutionsdashboard`
+- Prisma ORM installed and initialized
+- Prisma connected to PostgreSQL successfully
+- Migration system verified
+- Beekeeper Studio connected (DB visibility confirmed)
+- TypeScript Node environment configured (`@types/node`)
 
 ---
 
-## Database Design (Planned)
+### ⚙️ In Progress
 
-### Clients
+- Finalizing Phase 3: database schema design (Prisma models)
+- Preparing authentication system (Phase 4)
+
+---
+
+## 🗄️ Database
+
+### Connection
+- Engine: PostgreSQL (local)
+- Host: `localhost:5432`
+- Database: `spwebsolutionsdashboard`
+- ORM: Prisma
+
+### Status
+- Fully connected via Prisma
+- Migration successfully executed
+- Database schema is active and deployed
+- Visible in Beekeeper Studio
+
+---
+
+## 📊 Active Database Schema
+
+### User
+- id
+- email (unique)
+- password
+- role (admin | client)
+- createdAt
+
+Relationships:
+- has many Clients
+
+---
+
+### Client
 - id
 - name
 - email
-- phone
-- created_at
+- userId (FK → User)
 
-### Projects
+Relationships:
+- belongs to User
+- has many Projects
+- has many Invoices
+
+---
+
+### Project
 - id
-- client_id (FK)
 - name
 - description
-- status
-- start_date
+- status (not_started | in_progress | waiting_feedback | revision | completed)
+- startDate
 - deadline
+- clientId (FK → Client)
 
-### Invoices
+Relationships:
+- belongs to Client
+
+---
+
+### Invoice
 - id
-- client_id (FK)
-- invoice_number
 - amount
-- due_date
-- is_paid
+- dueDate
+- paid (boolean)
+- description
+- clientId (FK → Client)
+
+Relationships:
+- belongs to Client
 
 ---
 
-## Next Steps
+## 🔐 Next Steps (Phase 4)
 
-- Build backend authentication (JWT + bcrypt)
-- Create users table (Admin / Client roles)
-- Secure API routes
-- Connect PostgreSQL database
-- Start CRUD systems (clients, projects, invoices)
+- Build authentication system:
+  - Register
+  - Login
+  - Password hashing (bcrypt)
+  - JWT tokens
+- Add protected routes
+- Implement roles (admin/client)
 
 ---
 
-## Notes
+## 🧠 Architecture Notes
 
-- Backend runs on `http://localhost:5000`
-- Frontend will run on `http://localhost:5173`
-- Database: PostgreSQL (to be configured in Phase 4)
-- Development is structured in phases with Git commits per milestone
+- Backend: REST API (Express)
+- Prisma: ORM layer between Node and PostgreSQL
+- Beekeeper Studio: database visualization tool
+- Development follows phased architecture (0 → 9)
+- Git commits per milestone
+
+---
+
+## 🌐 Local Development
+
+| Service  | URL |
+|----------|-----|
+| Backend  | http://localhost:5000 |
+| Frontend | http://localhost:5173 |
+| DB       | localhost:5432 |
+
+---
+
+## 🧭 Development Method
+
+- Phase-based development
+- Backend-first architecture
+- Schema-first database design
+- Incremental Git commits
+
+---
+
+## 🧪 Notes
+
+- Backend stable
+- Database connection verified
+- Prisma migration system working
+- Ready for schema design
