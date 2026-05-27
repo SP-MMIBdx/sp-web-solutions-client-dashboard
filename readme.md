@@ -70,17 +70,39 @@ sp-web-solutions-client-dashboard/
 - PostgreSQL installed and configured locally
 - Database created: `spwebsolutionsdashboard`
 - Prisma ORM installed and initialized
-- Prisma connected to PostgreSQL successfully
+- Prisma connected successfully
 - Migration system verified
-- Beekeeper Studio connected (DB visibility confirmed)
-- TypeScript Node environment configured (`@types/node`)
+- Beekeeper Studio connected
+- Schema implemented and migrated successfully
+- Ready for authentication development
 
----
+- Initial relational schema created:
+  - User
+  - Client
+  - Project
+  - Invoice
 
-### ⚙️ In Progress
+- Schema architecture refined:
+  - User → optional Client profile
+  - Client → Projects
+  - Client → Invoices
 
-- Finalizing Phase 3: database schema design (Prisma models)
-- Preparing authentication system (Phase 4)
+- Additional business fields added:
+  - Client.phone
+  - Invoice.invoiceNumber
+
+- Database migration successfully executed
+- Relationships verified visually in Beekeeper Studio
+
+### ⚙️ Next Phase
+
+Phase 4 — Authentication System
+- Register
+- Login
+- Password hashing
+- JWT generation
+- Protected routes
+- Admin / Client permissions
 
 ---
 
@@ -110,7 +132,11 @@ sp-web-solutions-client-dashboard/
 - createdAt
 
 Relationships:
-- has many Clients
+- Optional one-to-one Client profile
+
+Purpose:
+- Authentication and authorization
+- Admin and client login accounts
 
 ---
 
@@ -118,12 +144,17 @@ Relationships:
 - id
 - name
 - email
-- userId (FK → User)
+- phone
+- userId (optional FK → User)
 
 Relationships:
-- belongs to User
-- has many Projects
-- has many Invoices
+- Optional link to User account
+- Has many Projects
+- Has many Invoices
+
+Purpose:
+- Stores business/client information
+- Can exist with or without portal access
 
 ---
 
@@ -131,18 +162,27 @@ Relationships:
 - id
 - name
 - description
-- status (not_started | in_progress | waiting_feedback | revision | completed)
+- status
+  - not_started
+  - in_progress
+  - waiting_feedback
+  - revision
+  - completed
 - startDate
 - deadline
 - clientId (FK → Client)
 
 Relationships:
-- belongs to Client
+- Belongs to Client
+
+Purpose:
+- Tracks project progress and status
 
 ---
 
 ### Invoice
 - id
+- invoiceNumber (unique)
 - amount
 - dueDate
 - paid (boolean)
@@ -150,19 +190,10 @@ Relationships:
 - clientId (FK → Client)
 
 Relationships:
-- belongs to Client
+- Belongs to Client
 
----
-
-## 🔐 Next Steps (Phase 4)
-
-- Build authentication system:
-  - Register
-  - Login
-  - Password hashing (bcrypt)
-  - JWT tokens
-- Add protected routes
-- Implement roles (admin/client)
+Purpose:
+- Tracks billing and payment status
 
 ---
 
