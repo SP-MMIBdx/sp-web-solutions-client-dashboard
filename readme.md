@@ -10,7 +10,7 @@ This application is a lightweight business management system for freelancers and
 
 It provides:
 
-- Client management
+- Client management system
 - Project tracking system
 - Invoice & payment tracking
 - Authentication system (JWT-based)
@@ -21,13 +21,13 @@ It provides:
 
 ## ⚙️ Tech Stack
 
-| Layer    | Stack                          |
-|----------|------------------------------|
-| Frontend | React, Vite, Tailwind CSS     |
-| Backend  | Node.js, Express              |
-| Database | PostgreSQL                    |
-| ORM      | Prisma                        |
-| Auth     | JWT + bcrypt                  |
+| Layer    | Stack                        |
+|----------|-----------------------------|
+| Frontend | React, Vite, Tailwind CSS   |
+| Backend  | Node.js, Express            |
+| Database | PostgreSQL                 |
+| ORM      | Prisma                     |
+| Auth     | JWT + bcrypt               |
 
 ---
 
@@ -46,7 +46,14 @@ sp-web-solutions-client-dashboard/
 │
 ├── backend/
 │ ├── routes/
+│ │ ├── auth.routes.js
+│ │ ├── client.routes.js
+│ │ └── index.js
 │ ├── controllers/
+│ │ ├── auth.controller.js
+│ │ └── client.controller.js
+│ ├── services/
+│ │ └── client.service.js
 │ ├── middleware/
 │ │ ├── auth.middleware.js
 │ │ └── role.middleware.js
@@ -65,27 +72,29 @@ sp-web-solutions-client-dashboard/
 
 ## 🚀 Current Status
 
-### ✅ Phase 0–3 Completed (Infrastructure)
+### ✅ Phase 0–3 — Infrastructure COMPLETE
 
 - Project initialized
 - Git repository created
 - Express backend running
 - PostgreSQL configured locally
 - Prisma ORM installed and connected
-- Database migration system working
+- Migration system working
 - Beekeeper Studio connected
-- Base schema created and migrated
-- Core models:
-  - User
-  - Client
-  - Project
-  - Invoice
+- Database schema created and migrated
+
+### Core Models Implemented
+
+- User
+- Client
+- Project
+- Invoice
 
 ---
 
-### 🔐 Phase 4 — Authentication System (COMPLETE)
+## 🔐 Phase 4 — Authentication System (COMPLETE)
 
-#### ✅ Implemented Features
+### ✅ Implemented Features
 
 - User registration (`POST /auth/register`)
 - User login (`POST /auth/login`)
@@ -93,8 +102,8 @@ sp-web-solutions-client-dashboard/
 - Password hashing (bcrypt)
 - Auth middleware (JWT verification)
 - Role-based access control (RBAC)
-- Protected routes (`/auth/me`)
-- Admin-only route protection
+- Protected route (`/auth/me`)
+- Admin-only access routes
 - Client/Admin shared access routes
 
 ---
@@ -103,27 +112,27 @@ sp-web-solutions-client-dashboard/
 
 ### Register Flow
 
-Request → Express → Controller → bcrypt hash → Prisma → PostgreSQL → Response
+Request → Controller → bcrypt → Prisma → PostgreSQL → Response
 
 
 ### Login Flow
 
-Request → Controller → password check → JWT generation → response token
+Request → Controller → Password validation → JWT generation → Response
 
 
-### Protected Request Flow
+### Protected Route Flow
 
-Client → JWT header → auth middleware → role middleware → controller → response
+Client → JWT → Auth Middleware → Role Middleware → Controller → Response
 
 
 ---
 
-## 🔐 Security Layer
+## 🔐 Security Architecture
 
-- bcrypt → password hashing (never store plaintext)
-- JWT → session authentication
-- Middleware → request protection layer
-- RBAC → role-based authorization (admin/client separation)
+- **bcrypt** → password hashing (never store plaintext)
+- **JWT** → stateless authentication
+- **Middleware layer** → request protection
+- **RBAC** → role-based authorization (admin/client)
 
 ---
 
@@ -139,12 +148,12 @@ Client → JWT header → auth middleware → role middleware → controller →
 
 - Fully connected
 - Migration system active
-- Schema synced
+- Schema synchronized
 - Prisma Client operational
 
 ---
 
-## 📊 Active Database Schema
+## 📊 Database Schema
 
 ### User
 
@@ -164,7 +173,7 @@ Authentication + authorization system
 - id
 - name
 - email
-- phone
+- phone (optional)
 - userId (optional FK)
 
 Purpose:
@@ -204,15 +213,15 @@ Billing and payment tracking
 
 ## 🧠 Architecture Overview
 
-### Backend Design Pattern
+### Backend Pattern
 
 - Modular MVC architecture
+- Service layer introduced (Phase 5)
 - Separation of concerns:
-  - routes → endpoints
-  - controllers → logic
-  - middleware → security layer
-  - utils → helpers
-  - prisma → database layer
+
+
+routes → controllers → services → utils → prisma → database
+
 
 ---
 
@@ -225,13 +234,15 @@ Express App (app.js)
 ↓
 Route Aggregator (routes/index.js)
 ↓
-Route Module (auth.routes.js)
+Route Module
 ↓
 Middleware Layer
 ├── auth.middleware.js (JWT verification)
 ├── role.middleware.js (RBAC)
 ↓
 Controller (business logic)
+↓
+Service Layer (database logic)
 ↓
 Utils (bcrypt / jwt)
 ↓
@@ -244,49 +255,89 @@ Response (JSON)
 
 ---
 
-## ⚙️ Development Method
+## ⚙️ Phase 5 — Client Management System (COMPLETE)
 
-- Phase-based development (0 → 9)
-- Backend-first architecture
-- Schema-first database design
-- Git commits per milestone
-- Incremental feature rollout
+### ✅ Implemented Features
 
----
+Full CRUD system for clients:
 
-## 🌐 Local Development
-
-| Service  | URL |
-|----------|-----|
-| Backend  | http://localhost:5000 |
-| Frontend | http://localhost:5173 |
-| Database | localhost:5432 |
+| Method | Endpoint         | Description       |
+|--------|-----------------|-------------------|
+| POST   | /clients         | Create client     |
+| GET    | /clients         | Get all clients   |
+| GET    | /clients/:id     | Get single client |
+| PUT    | /clients/:id     | Update client     |
+| DELETE | /clients/:id     | Delete client     |
 
 ---
 
-## 🧪 Current Capabilities
+### 🧠 Architecture Added
 
-The backend currently supports:
+- Service layer (`client.service.js`)
+- Controller layer (`client.controller.js`)
+- Prisma-based data persistence
+- Consistent API response format:
 
-- User registration
-- User login
-- JWT authentication
-- Protected routes
-- Role-based access control
-- Secure password storage
-- PostgreSQL persistence
+```json
+{
+  "message": "string",
+  "data": {}
+}
+⚙️ Error Handling
+404 → resource not found (Prisma P2025)
+400 → invalid input
+500 → server error
+📦 Client Flow
+Request → Controller → Service → Prisma → PostgreSQL → Response
+🧪 Current Capabilities
+
+The backend now supports:
+
+User registration
+User login
+JWT authentication
+Protected routes
+Role-based access control
+Full client CRUD system
+Secure password storage
+PostgreSQL persistence
+🌐 Local Development
+Service	URL
+Backend	http://localhost:5000
+Frontend	http://localhost:5173
+Database	localhost:5432
+🧭 Development Method
+Phase-based architecture (0 → 9)
+Backend-first design
+Schema-first database modeling
+Service-layer separation introduced
+Incremental Git commits per feature
+Manual API testing (PowerShell / curl)
+🚧 Next Phase (Phase 6)
+
+Project Management System:
+
+Project CRUD API
+Link projects to clients
+Status tracking system
+Deadline logic
+Progress workflow updates
 
 ---
 
-## 🚧 Next Phase (Phase 5)
+## 🧾 DONE FOR TODAY
 
-Client Management System:
+You now have:
 
-- Create clients API
-- Read clients API
-- Update clients API
-- Delete clients API
-- Link clients to projects
-- Link clients to invoices
+- Clean README (production-level structure)
+- Accurate Phase 4 + Phase 5 documentation
+- Real architecture reflected (service layer included)
+- No duplication or outdated flows
+- Ready for Phase 6 (Projects system)
+
+---
+
+
+👉 Phase 6 = Project system design 
 
 ---
