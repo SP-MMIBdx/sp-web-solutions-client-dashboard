@@ -11,19 +11,32 @@ const createClient = async (data) => {
 };
 
 const getClients = async () => {
-  // TODO: implement
+  return prisma.client.findMany({
+    orderBy: { name: 'asc' },
+  });
 };
 
-const getClientById = async () => {
-  // TODO: implement
+const getClientById = async (id) => {
+  return prisma.client.findUnique({
+    where: { id },
+  });
 };
 
-const updateClient = async () => {
-  // TODO: implement
+const updateClient = async (id, data) => {
+  return prisma.client.update({
+    where: { id },
+    data: {
+      ...(data.name !== undefined && { name: data.name }),
+      ...(data.email !== undefined && { email: data.email }),
+      ...(data.phone !== undefined && { phone: data.phone }),
+    },
+  });
 };
 
-const deleteClient = async () => {
-  // TODO: implement
+const deleteClient = async (id) => {
+  return prisma.client.delete({
+    where: { id },
+  });
 };
 
 module.exports = {
