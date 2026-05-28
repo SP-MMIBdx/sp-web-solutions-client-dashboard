@@ -1,8 +1,16 @@
 const prisma = require('../prisma/client');
-const { hashPassword } = require('../utils/hash');
+const { hashPassword, comparePassword } = require('../utils/hash');
+const { generateToken } = require('../utils/jwt');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const ALLOWED_ROLES = ['admin', 'client'];
+
+const toSafeUser = (user) => ({
+  id: user.id,
+  email: user.email,
+  role: user.role,
+  createdAt: user.createdAt,
+});
 
 const register = async (req, res) => {
   try {
@@ -48,12 +56,7 @@ const register = async (req, res) => {
 
     return res.status(201).json({
       message: 'User created successfully',
-      user: {
-        id: user.id,
-        email: user.email,
-        role: user.role,
-        createdAt: user.createdAt,
-      },
+      user: toSafeUser(user),
     });
   } catch (error) {
     console.error('Register error:', error.message);
@@ -61,6 +64,59 @@ const register = async (req, res) => {
   }
 };
 
+const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required' });
+    }
+
+    const normalizedEmail = String(email).trim().toLowerCase();
+
+    const user = await prisma.user.findUnique({
+      where: { email: normalizedEmail },
+    });
+
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const isValidPassword = await comparePassword(password, user.password);
+
+    if (!isValidPassword) {
+      return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    const token = generateToken(user);
+
+    return res.status(200).json({
+      message: 'Login successful',
+      user: toSafeUser(user),
+      token,
+    });
+  } catch (error) {
+    console.error('Login error:', error.message);
+    return res.status(500).json({ message: 'Server error' });
+  }
+};
+
+const me = (req, res) => {
+  return res.status(200).json({ user: req.user });
+};
+
+const adminOnly = (req, res) => {
+  return res.status(200).json({ message: 'Admin access granted' });
+};
+
+const clientOrAdmin = (req, res) => {
+  return res.status(200).json({ message: 'Access granted' });
+};
+
 module.exports = {
   register,
+  login,
+  me,
+  adminOnly,
+  clientOrAdmin,
 };
