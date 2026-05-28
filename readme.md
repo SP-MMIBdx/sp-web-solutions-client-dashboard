@@ -1,18 +1,21 @@
 # SP Web Solutions — Client Dashboard
 
-Full-stack client dashboard application for managing clients, projects, and invoices.
+Full-stack SaaS-style client dashboard for managing clients, projects, and invoices.
 
 ---
 
 ## 📌 Project Overview
 
-This application is designed as a lightweight SaaS-style business tool for freelancers and agencies:
+This application is a lightweight business management system for freelancers and agencies.
+
+It provides:
 
 - Client management
-- Project tracking
-- Invoice generation & payment tracking
-- Role-based access (Admin / Client)
-- Scalable backend architecture (REST API + PostgreSQL)
+- Project tracking system
+- Invoice & payment tracking
+- Authentication system (JWT-based)
+- Role-based access control (Admin / Client)
+- Scalable REST API architecture
 
 ---
 
@@ -22,7 +25,7 @@ This application is designed as a lightweight SaaS-style business tool for freel
 |----------|------------------------------|
 | Frontend | React, Vite, Tailwind CSS     |
 | Backend  | Node.js, Express              |
-| Database | PostgreSQL (via Prisma ORM)   |
+| Database | PostgreSQL                    |
 | ORM      | Prisma                        |
 | Auth     | JWT + bcrypt                  |
 
@@ -34,176 +37,220 @@ This application is designed as a lightweight SaaS-style business tool for freel
 sp-web-solutions-client-dashboard/
 │
 ├── frontend/
-│   └── src/
-│       ├── components/
-│       ├── pages/
-│       ├── services/
-│       ├── context/
-│       └── hooks/
+│ └── src/
+│ ├── components/
+│ ├── pages/
+│ ├── services/
+│ ├── context/
+│ └── hooks/
 │
 ├── backend/
-│   ├── routes/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── config/
-│   ├── utils/
-│   └── prisma/
-│       ├── schema.prisma
-│       └── migrations/
-│
-├── .gitignore
-└── README.md
+│ ├── routes/
+│ ├── controllers/
+│ ├── middleware/
+│ │ ├── auth.middleware.js
+│ │ └── role.middleware.js
+│ ├── utils/
+│ │ ├── hash.js
+│ │ └── jwt.js
+│ ├── prisma/
+│ │ ├── schema.prisma
+│ │ ├── client.js
+│ │ └── migrations/
+│ ├── app.js
+│ └── index.js
 
 
 ---
 
 ## 🚀 Current Status
 
-### ✅ Completed (Phase 0–3)
+### ✅ Phase 0–3 Completed (Infrastructure)
 
 - Project initialized
 - Git repository created
-- Full-stack folder scaffold created
-- Node.js environment configured
 - Express backend running
-- `/health` endpoint working
-- PostgreSQL installed and configured locally
-- Database created: `spwebsolutionsdashboard`
-- Prisma ORM installed and initialized
-- Prisma connected successfully
-- Migration system verified
+- PostgreSQL configured locally
+- Prisma ORM installed and connected
+- Database migration system working
 - Beekeeper Studio connected
-- Schema implemented and migrated successfully
-- Ready for authentication development
-
-- Initial relational schema created:
+- Base schema created and migrated
+- Core models:
   - User
   - Client
   - Project
   - Invoice
 
-- Schema architecture refined:
-  - User → optional Client profile
-  - Client → Projects
-  - Client → Invoices
+---
 
-- Additional business fields added:
-  - Client.phone
-  - Invoice.invoiceNumber
+### 🔐 Phase 4 — Authentication System (COMPLETE)
 
-- Database migration successfully executed
-- Relationships verified visually in Beekeeper Studio
+#### ✅ Implemented Features
 
-### ⚙️ Next Phase
+- User registration (`POST /auth/register`)
+- User login (`POST /auth/login`)
+- JWT token generation
+- Password hashing (bcrypt)
+- Auth middleware (JWT verification)
+- Role-based access control (RBAC)
+- Protected routes (`/auth/me`)
+- Admin-only route protection
+- Client/Admin shared access routes
 
-Phase 4 — Authentication System
-- Register
-- Login
-- Password hashing
-- JWT generation
-- Protected routes
-- Admin / Client permissions
+---
+
+## 🧠 Authentication Flow
+
+### Register Flow
+
+Request → Express → Controller → bcrypt hash → Prisma → PostgreSQL → Response
+
+
+### Login Flow
+
+Request → Controller → password check → JWT generation → response token
+
+
+### Protected Request Flow
+
+Client → JWT header → auth middleware → role middleware → controller → response
+
+
+---
+
+## 🔐 Security Layer
+
+- bcrypt → password hashing (never store plaintext)
+- JWT → session authentication
+- Middleware → request protection layer
+- RBAC → role-based authorization (admin/client separation)
 
 ---
 
 ## 🗄️ Database
 
 ### Connection
-- Engine: PostgreSQL (local)
-- Host: `localhost:5432`
-- Database: `spwebsolutionsdashboard`
+
+- Engine: PostgreSQL
+- Host: localhost:5432
 - ORM: Prisma
 
 ### Status
-- Fully connected via Prisma
-- Migration successfully executed
-- Database schema is active and deployed
-- Visible in Beekeeper Studio
+
+- Fully connected
+- Migration system active
+- Schema synced
+- Prisma Client operational
 
 ---
 
 ## 📊 Active Database Schema
 
 ### User
+
 - id
 - email (unique)
-- password
+- password (hashed)
 - role (admin | client)
 - createdAt
 
-Relationships:
-- Optional one-to-one Client profile
-
 Purpose:
-- Authentication and authorization
-- Admin and client login accounts
+Authentication + authorization system
 
 ---
 
 ### Client
+
 - id
 - name
 - email
 - phone
-- userId (optional FK → User)
-
-Relationships:
-- Optional link to User account
-- Has many Projects
-- Has many Invoices
+- userId (optional FK)
 
 Purpose:
-- Stores business/client information
-- Can exist with or without portal access
+Business/client entity linked to system users
 
 ---
 
 ### Project
+
 - id
 - name
 - description
-- status
-  - not_started
-  - in_progress
-  - waiting_feedback
-  - revision
-  - completed
+- status (not_started | in_progress | waiting_feedback | revision | completed)
 - startDate
 - deadline
-- clientId (FK → Client)
-
-Relationships:
-- Belongs to Client
+- clientId
 
 Purpose:
-- Tracks project progress and status
+Project tracking system
 
 ---
 
 ### Invoice
+
 - id
 - invoiceNumber (unique)
 - amount
 - dueDate
-- paid (boolean)
+- paid
 - description
-- clientId (FK → Client)
-
-Relationships:
-- Belongs to Client
+- clientId
 
 Purpose:
-- Tracks billing and payment status
+Billing and payment tracking
 
 ---
 
-## 🧠 Architecture Notes
+## 🧠 Architecture Overview
 
-- Backend: REST API (Express)
-- Prisma: ORM layer between Node and PostgreSQL
-- Beekeeper Studio: database visualization tool
-- Development follows phased architecture (0 → 9)
+### Backend Design Pattern
+
+- Modular MVC architecture
+- Separation of concerns:
+  - routes → endpoints
+  - controllers → logic
+  - middleware → security layer
+  - utils → helpers
+  - prisma → database layer
+
+---
+
+## 🔄 Full Backend Request Lifecycle
+
+
+Client Request
+↓
+Express App (app.js)
+↓
+Route Aggregator (routes/index.js)
+↓
+Route Module (auth.routes.js)
+↓
+Middleware Layer
+├── auth.middleware.js (JWT verification)
+├── role.middleware.js (RBAC)
+↓
+Controller (business logic)
+↓
+Utils (bcrypt / jwt)
+↓
+Prisma Client
+↓
+PostgreSQL
+↓
+Response (JSON)
+
+
+---
+
+## ⚙️ Development Method
+
+- Phase-based development (0 → 9)
+- Backend-first architecture
+- Schema-first database design
 - Git commits per milestone
+- Incremental feature rollout
 
 ---
 
@@ -213,22 +260,33 @@ Purpose:
 |----------|-----|
 | Backend  | http://localhost:5000 |
 | Frontend | http://localhost:5173 |
-| DB       | localhost:5432 |
+| Database | localhost:5432 |
 
 ---
 
-## 🧭 Development Method
+## 🧪 Current Capabilities
 
-- Phase-based development
-- Backend-first architecture
-- Schema-first database design
-- Incremental Git commits
+The backend currently supports:
+
+- User registration
+- User login
+- JWT authentication
+- Protected routes
+- Role-based access control
+- Secure password storage
+- PostgreSQL persistence
 
 ---
 
-## 🧪 Notes
+## 🚧 Next Phase (Phase 5)
 
-- Backend stable
-- Database connection verified
-- Prisma migration system working
-- Ready for schema design
+Client Management System:
+
+- Create clients API
+- Read clients API
+- Update clients API
+- Delete clients API
+- Link clients to projects
+- Link clients to invoices
+
+---
