@@ -3,7 +3,7 @@ const { hashPassword, comparePassword } = require('../utils/hash');
 const { generateToken } = require('../utils/jwt');
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const ALLOWED_ROLES = ['admin', 'client'];
+const ALLOWED_ROLES = ['admin'];
 
 const toSafeUser = (user) => ({
   id: user.id,
@@ -30,7 +30,7 @@ const register = async (req, res) => {
       return res.status(400).json({ message: 'Password must be at least 8 characters' });
     }
 
-    const userRole = role ? String(role).trim().toLowerCase() : 'client';
+    const userRole = role ? String(role).trim().toLowerCase() : 'admin';
 
     if (!ALLOWED_ROLES.includes(userRole)) {
       return res.status(400).json({ message: 'Invalid role' });
@@ -109,14 +109,9 @@ const adminOnly = (req, res) => {
   return res.status(200).json({ message: 'Admin access granted' });
 };
 
-const clientOrAdmin = (req, res) => {
-  return res.status(200).json({ message: 'Access granted' });
-};
-
 module.exports = {
   register,
   login,
   me,
   adminOnly,
-  clientOrAdmin,
 };
