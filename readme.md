@@ -279,10 +279,10 @@ Full CRUD system for clients:
 - Consistent API response format:
 
 ```json
-{
+// {
   "message": "string",
   "data": {}
-}
+// } 
 ⚙️ Error Handling
 404 → resource not found (Prisma P2025)
 400 → invalid input
