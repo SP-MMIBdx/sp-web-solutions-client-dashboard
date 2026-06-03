@@ -6,7 +6,7 @@ Full-stack SaaS-style client dashboard for managing clients, projects, and invoi
 
 ## 📌 Project Overview
 
-This application is a lightweight business management system for freelancers and agencies.
+This application is a lightweight business management system designed for SP Web Solutions.
 
 It provides:
 
@@ -14,59 +14,70 @@ It provides:
 - Project tracking system
 - Invoice & payment tracking
 - Authentication system (JWT-based)
-- Role-based access control (Admin / Client)
+- Role-based access control (Admin / Employee)
 - Scalable REST API architecture
 
 ---
 
 ## ⚙️ Tech Stack
 
-| Layer    | Stack                        |
-|----------|-----------------------------|
-| Frontend | React, Vite, Tailwind CSS   |
-| Backend  | Node.js, Express            |
-| Database | PostgreSQL                 |
-| ORM      | Prisma                     |
-| Auth     | JWT + bcrypt               |
+| Layer | Stack |
+|--------|--------|
+| Frontend | React, Vite, Tailwind CSS |
+| Backend | Node.js, Express |
+| Database | PostgreSQL |
+| ORM | Prisma |
+| Auth | JWT + bcrypt |
 
 ---
 
 ## 📁 Project Structure
 
-
+```text
 sp-web-solutions-client-dashboard/
 │
 ├── frontend/
-│ └── src/
-│ ├── components/
-│ ├── pages/
-│ ├── services/
-│ ├── context/
-│ └── hooks/
+│   └── src/
+│       ├── components/
+│       ├── pages/
+│       ├── services/
+│       ├── context/
+│       └── hooks/
 │
 ├── backend/
-│ ├── routes/
-│ │ ├── auth.routes.js
-│ │ ├── client.routes.js
-│ │ └── index.js
-│ ├── controllers/
-│ │ ├── auth.controller.js
-│ │ └── client.controller.js
-│ ├── services/
-│ │ └── client.service.js
-│ ├── middleware/
-│ │ ├── auth.middleware.js
-│ │ └── role.middleware.js
-│ ├── utils/
-│ │ ├── hash.js
-│ │ └── jwt.js
-│ ├── prisma/
-│ │ ├── schema.prisma
-│ │ ├── client.js
-│ │ └── migrations/
-│ ├── app.js
-│ └── index.js
-
+│   ├── routes/
+│   │   ├── auth.routes.js
+│   │   ├── client.routes.js
+│   │   ├── project.routes.js
+│   │   └── index.js
+│   │
+│   ├── controllers/
+│   │   ├── auth.controller.js
+│   │   ├── client.controller.js
+│   │   └── project.controller.js
+│   │
+│   ├── services/
+│   │   ├── client.service.js
+│   │   └── project.service.js
+│   │
+│   ├── middleware/
+│   │   ├── auth.middleware.js
+│   │   └── role.middleware.js
+│   │
+│   ├── utils/
+│   │   ├── hash.js
+│   │   └── jwt.js
+│   │
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   ├── client.js
+│   │   └── migrations/
+│   │
+│   ├── app.js
+│   └── index.js
+│
+└── README.md
+```
 
 ---
 
@@ -92,9 +103,9 @@ sp-web-solutions-client-dashboard/
 
 ---
 
-## 🔐 Phase 4 — Authentication System (COMPLETE)
+## 🔐 Phase 4 — Authentication System COMPLETE
 
-### ✅ Implemented Features
+### Implemented Features
 
 - User registration (`POST /auth/register`)
 - User login (`POST /auth/login`)
@@ -103,36 +114,82 @@ sp-web-solutions-client-dashboard/
 - Auth middleware (JWT verification)
 - Role-based access control (RBAC)
 - Protected route (`/auth/me`)
-- Admin-only access routes
-- Client/Admin shared access routes
+- Admin-only routes
+- Employee/Admin shared routes
 
 ---
 
-## 🧠 Authentication Flow
+## ⚙️ Phase 5 — Client Management System COMPLETE
 
-### Register Flow
+### Implemented Features
 
-Request → Controller → bcrypt → Prisma → PostgreSQL → Response
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| POST | /clients | Create client |
+| GET | /clients | Get all clients |
+| GET | /clients/:id | Get single client |
+| PUT | /clients/:id | Update client |
+| DELETE | /clients/:id | Delete client |
 
+### Architecture Added
 
-### Login Flow
+- Service layer (`client.service.js`)
+- Controller layer (`client.controller.js`)
+- Prisma persistence
+- Validation layer
+- Standardized API responses
 
-Request → Controller → Password validation → JWT generation → Response
+---
 
+## 📋 Phase 6 — Project Management System COMPLETE
 
-### Protected Route Flow
+### Implemented Features
 
-Client → JWT → Auth Middleware → Role Middleware → Controller → Response
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| POST | /projects | Create project |
+| GET | /projects | Get all projects |
+| GET | /projects/:id | Get single project |
+| PUT | /projects/:id | Update project |
+| DELETE | /projects/:id | Delete project |
 
+### Additional Functionality
+
+- Client existence validation
+- Project status validation
+- Project-to-client relationship population
+- Partial updates supported
+- Standardized API responses
+
+### Supported Project Statuses
+
+- not_started
+- in_progress
+- waiting_feedback
+- revision
+- completed
 
 ---
 
 ## 🔐 Security Architecture
 
-- **bcrypt** → password hashing (never store plaintext)
-- **JWT** → stateless authentication
-- **Middleware layer** → request protection
-- **RBAC** → role-based authorization (admin/client)
+### bcrypt
+
+Used for password hashing.
+
+Passwords are never stored in plaintext.
+
+### JWT
+
+Used for authentication and session management.
+
+### Middleware
+
+Protects routes and verifies access permissions.
+
+### RBAC
+
+Role-based authorization for SP Web Solutions staff.
 
 ---
 
@@ -157,57 +214,85 @@ Client → JWT → Auth Middleware → Role Middleware → Controller → Respon
 
 ### User
 
+Stores SP Web Solutions employee accounts.
+
+Fields:
+
 - id
-- email (unique)
+- email
 - password (hashed)
-- role (admin | client)
+- role (admin | employee)
 - createdAt
 
 Purpose:
-Authentication + authorization system
+
+Authentication and authorization.
 
 ---
 
 ### Client
 
+Stores business clients managed by SP Web Solutions.
+
+Fields:
+
 - id
 - name
 - email
-- phone (optional)
-- userId (optional FK)
+- phone
+
+Relationships:
+
+- Has many Projects
+- Has many Invoices
 
 Purpose:
-Business/client entity linked to system users
+
+Business entity management.
 
 ---
 
 ### Project
 
+Fields:
+
 - id
 - name
 - description
-- status (not_started | in_progress | waiting_feedback | revision | completed)
+- status
 - startDate
 - deadline
 - clientId
 
+Relationships:
+
+- Belongs to Client
+
 Purpose:
-Project tracking system
+
+Project tracking and workflow management.
 
 ---
 
 ### Invoice
 
+Fields:
+
 - id
-- invoiceNumber (unique)
+- invoiceNumber
 - amount
 - dueDate
 - paid
 - description
 - clientId
 
+Relationships:
+
+- Belongs to Client
+
 Purpose:
-Billing and payment tracking
+
+Billing and payment tracking.
 
 ---
 
@@ -215,68 +300,63 @@ Billing and payment tracking
 
 ### Backend Pattern
 
-- Modular MVC architecture
-- Service layer introduced (Phase 5)
-- Separation of concerns:
+Modular MVC + Service Layer architecture.
 
+Request flow:
 
-routes → controllers → services → utils → prisma → database
+```text
+Routes
+↓
+Controllers
+↓
+Services
+↓
+Prisma
+↓
+PostgreSQL
+```
 
+### Separation of Concerns
+
+| Layer | Responsibility |
+|---------|----------------|
+| Routes | Endpoint definitions |
+| Controllers | HTTP request/response handling |
+| Services | Business logic & database operations |
+| Middleware | Authentication & authorization |
+| Utils | Reusable helper functions |
+| Prisma | ORM layer |
+| PostgreSQL | Persistent storage |
 
 ---
 
 ## 🔄 Full Backend Request Lifecycle
 
-
+```text
 Client Request
-↓
+       ↓
 Express App (app.js)
-↓
+       ↓
 Route Aggregator (routes/index.js)
-↓
+       ↓
 Route Module
-↓
+       ↓
 Middleware Layer
-├── auth.middleware.js (JWT verification)
-├── role.middleware.js (RBAC)
-↓
-Controller (business logic)
-↓
-Service Layer (database logic)
-↓
-Utils (bcrypt / jwt)
-↓
+       ↓
+Controller
+       ↓
+Service Layer
+       ↓
 Prisma Client
-↓
+       ↓
 PostgreSQL
-↓
-Response (JSON)
-
-
----
-
-## ⚙️ Phase 5 — Client Management System (COMPLETE)
-
-### ✅ Implemented Features
-
-Full CRUD system for clients:
-
-| Method | Endpoint         | Description       |
-|--------|-----------------|-------------------|
-| POST   | /clients         | Create client     |
-| GET    | /clients         | Get all clients   |
-| GET    | /clients/:id     | Get single client |
-| PUT    | /clients/:id     | Update client     |
-| DELETE | /clients/:id     | Delete client     |
+       ↓
+JSON Response
+```
 
 ---
 
-### 🧠 Architecture Added
-
-- Service layer (`client.service.js`)
-- Controller layer (`client.controller.js`)
-- Prisma-based data persistence
-- Consistent API response format:
+## 📦 Standard API Response Format
 
 ```json
 {
@@ -284,63 +364,94 @@ Full CRUD system for clients:
   "data": {}
 }
 ```
---- 
- 
-⚙️ Error Handling
-404 → resource not found (Prisma P2025)
-400 → invalid input
-500 → server error
-📦 Client Flow
-Request → Controller → Service → Prisma → PostgreSQL → Response
-🧪 Current Capabilities
-
-The backend now supports:
-
-User registration
-User login
-JWT authentication
-Protected routes
-Role-based access control
-Full client CRUD system
-Secure password storage
-PostgreSQL persistence
-🌐 Local Development
-Service	URL
-Backend	http://localhost:5000
-Frontend	http://localhost:5173
-Database	localhost:5432
-🧭 Development Method
-Phase-based architecture (0 → 9)
-Backend-first design
-Schema-first database modeling
-Service-layer separation introduced
-Incremental Git commits per feature
-Manual API testing (PowerShell / curl)
-🚧 Next Phase (Phase 6)
-
-Project Management System:
-
-Project CRUD API
-Link projects to clients
-Status tracking system
-Deadline logic
-Progress workflow updates
 
 ---
 
-## 🧾 DONE FOR TODAY
+## ⚙️ Error Handling
 
-You now have:
+| Code | Meaning |
+|--------|----------|
+| 200 | Success |
+| 201 | Resource created |
+| 400 | Validation error |
+| 401 | Unauthorized |
+| 403 | Forbidden |
+| 404 | Resource not found |
+| 500 | Server error |
 
-- Clean README (production-level structure)
-- Accurate Phase 4 + Phase 5 documentation
-- Real architecture reflected (service layer included)
-- No duplication or outdated flows
-- Ready for Phase 6 (Projects system)
+### Prisma Error Mapping
+
+```text
+P2025 → 404 Not Found
+```
 
 ---
 
+## 🧪 Current Capabilities
 
-👉 Phase 6 = Project system design 
+The backend currently supports:
+
+- User registration
+- User login
+- JWT authentication
+- Protected routes
+- Role-based access control
+- Full Client CRUD
+- Full Project CRUD
+- Secure password storage
+- PostgreSQL persistence
 
 ---
+
+## 🌐 Local Development
+
+| Service | URL |
+|----------|-----|
+| Backend | http://localhost:5000 |
+| Frontend | http://localhost:5173 |
+| Database | localhost:5432 |
+
+---
+
+## 🧭 Development Method
+
+- Phase-based architecture
+- Backend-first design
+- Schema-first database modeling
+- Service-layer architecture
+- Incremental Git commits
+- Manual API testing (PowerShell Invoke-RestMethod)
+
+---
+
+## 🚧 Next Phase — Phase 7
+
+Invoice Management System
+
+Planned features:
+
+- Create invoices
+- Read invoices
+- Update invoices
+- Delete invoices
+- Invoice-to-client relationships
+- Payment status tracking
+- Invoice number generation
+
+---
+
+## 🧾 Project Status
+
+Current completed phases:
+
+- ✅ Phase 0 — Project Setup
+- ✅ Phase 1 — Express Foundation
+- ✅ Phase 2 — PostgreSQL Setup
+- ✅ Phase 3 — Prisma Integration
+- ✅ Phase 4 — Authentication System
+- ✅ Phase 5 — Client Management System
+- ✅ Phase 6 — Project Management System
+
+Next:
+
+➡️ Phase 7 — Invoice Management System
