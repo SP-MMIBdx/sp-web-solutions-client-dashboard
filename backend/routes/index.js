@@ -10,4 +10,12 @@ router.use('/health', healthRoutes);
 router.use('/auth', authRoutes);
 router.use('/clients', clientRoutes);
 
+// Safely mount project routes
+try {
+  const projectRoutes = require('./project.routes');
+  router.use('/projects', projectRoutes);
+} catch (error) {
+  console.error('Failed to load project routes:', error.message);
+}
+
 module.exports = router;
