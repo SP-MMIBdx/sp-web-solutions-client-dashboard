@@ -18,4 +18,12 @@ try {
   console.error('Failed to load project routes:', error.message);
 }
 
+// Safely mount invoice routes
+try {
+  const invoiceRoutes = require('./invoice.routes');
+  router.use('/invoices', invoiceRoutes);
+} catch (error) {
+  console.error('Failed to load invoice routes:', error.message);
+}
+
 module.exports = router;
