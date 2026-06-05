@@ -49,16 +49,19 @@ sp-web-solutions-client-dashboard/
 │   │   ├── auth.routes.js
 │   │   ├── client.routes.js
 │   │   ├── project.routes.js
+│   │   ├── invoice.routes.js
 │   │   └── index.js
 │   │
 │   ├── controllers/
 │   │   ├── auth.controller.js
 │   │   ├── client.controller.js
-│   │   └── project.controller.js
+│   │   ├── project.controller.js
+│   │   └── invoice.controller.js
 │   │
 │   ├── services/
 │   │   ├── client.service.js
-│   │   └── project.service.js
+│   │   ├── project.service.js
+│   │   └── invoice.service.js
 │   │
 │   ├── middleware/
 │   │   ├── auth.middleware.js
@@ -83,14 +86,14 @@ sp-web-solutions-client-dashboard/
 
 ## 🚀 Current Status
 
-### ✅ Phase 0–3 — Infrastructure COMPLETE
+### ✅ Phase 0–3 — Infrastructure Complete
 
 - Project initialized
 - Git repository created
 - Express backend running
 - PostgreSQL configured locally
 - Prisma ORM installed and connected
-- Migration system working
+- Migration system operational
 - Beekeeper Studio connected
 - Database schema created and migrated
 
@@ -103,25 +106,24 @@ sp-web-solutions-client-dashboard/
 
 ---
 
-## 🔐 Phase 4 — Authentication System COMPLETE
+## 🔐 Phase 4 — Authentication System Complete
 
-### Implemented Features
+### Features
 
 - User registration (`POST /auth/register`)
 - User login (`POST /auth/login`)
 - JWT token generation
-- Password hashing (bcrypt)
-- Auth middleware (JWT verification)
+- Password hashing with bcrypt
+- Auth middleware
 - Role-based access control (RBAC)
-- Protected route (`/auth/me`)
-- Admin-only routes
-- Employee/Admin shared routes
+- Protected routes
+- Employee/Admin authorization structure
 
 ---
 
-## ⚙️ Phase 5 — Client Management System COMPLETE
+## ⚙️ Phase 5 — Client Management System Complete
 
-### Implemented Features
+### Endpoints
 
 | Method | Endpoint | Description |
 |----------|----------|-------------|
@@ -131,19 +133,19 @@ sp-web-solutions-client-dashboard/
 | PUT | /clients/:id | Update client |
 | DELETE | /clients/:id | Delete client |
 
-### Architecture Added
+### Features
 
-- Service layer (`client.service.js`)
-- Controller layer (`client.controller.js`)
-- Prisma persistence
+- Full CRUD operations
 - Validation layer
+- Prisma persistence
+- Service layer architecture
 - Standardized API responses
 
 ---
 
-## 📋 Phase 6 — Project Management System COMPLETE
+## 📋 Phase 6 — Project Management System Complete
 
-### Implemented Features
+### Endpoints
 
 | Method | Endpoint | Description |
 |----------|----------|-------------|
@@ -153,21 +155,45 @@ sp-web-solutions-client-dashboard/
 | PUT | /projects/:id | Update project |
 | DELETE | /projects/:id | Delete project |
 
-### Additional Functionality
+### Features
 
-- Client existence validation
-- Project status validation
-- Project-to-client relationship population
+- Full CRUD operations
+- Client relationship validation
+- Project status workflow
+- Project-to-client population
 - Partial updates supported
-- Standardized API responses
 
-### Supported Project Statuses
+### Supported Status Values
 
 - not_started
 - in_progress
 - waiting_feedback
 - revision
 - completed
+
+---
+
+## 💰 Phase 7 — Invoice Management System Complete
+
+### Endpoints
+
+| Method | Endpoint | Description |
+|----------|----------|-------------|
+| POST | /invoices | Create invoice |
+| GET | /invoices | Get all invoices |
+| GET | /invoices/:id | Get single invoice |
+| PUT | /invoices/:id | Update invoice |
+| DELETE | /invoices/:id | Delete invoice |
+
+### Features
+
+- Full CRUD operations
+- Invoice-to-client relationships
+- Paid/unpaid tracking
+- Invoice number uniqueness validation
+- Due date validation
+- Amount validation
+- Partial updates supported
 
 ---
 
@@ -185,7 +211,7 @@ Used for authentication and session management.
 
 ### Middleware
 
-Protects routes and verifies access permissions.
+Protects routes and verifies permissions.
 
 ### RBAC
 
@@ -204,9 +230,9 @@ Role-based authorization for SP Web Solutions staff.
 ### Status
 
 - Fully connected
-- Migration system active
 - Schema synchronized
 - Prisma Client operational
+- Migration system active
 
 ---
 
@@ -248,7 +274,7 @@ Relationships:
 
 Purpose:
 
-Business entity management.
+Client management.
 
 ---
 
@@ -279,7 +305,7 @@ Project tracking and workflow management.
 Fields:
 
 - id
-- invoiceNumber
+- invoiceNumber (unique)
 - amount
 - dueDate
 - paid
@@ -302,8 +328,6 @@ Billing and payment tracking.
 
 Modular MVC + Service Layer architecture.
 
-Request flow:
-
 ```text
 Routes
 ↓
@@ -322,9 +346,9 @@ PostgreSQL
 |---------|----------------|
 | Routes | Endpoint definitions |
 | Controllers | HTTP request/response handling |
-| Services | Business logic & database operations |
-| Middleware | Authentication & authorization |
-| Utils | Reusable helper functions |
+| Services | Business logic and database operations |
+| Middleware | Authentication and authorization |
+| Utils | Shared helper functions |
 | Prisma | ORM layer |
 | PostgreSQL | Persistent storage |
 
@@ -337,11 +361,11 @@ Client Request
        ↓
 Express App (app.js)
        ↓
-Route Aggregator (routes/index.js)
+Route Aggregator
        ↓
 Route Module
        ↓
-Middleware Layer
+Middleware
        ↓
 Controller
        ↓
@@ -372,16 +396,18 @@ JSON Response
 | Code | Meaning |
 |--------|----------|
 | 200 | Success |
-| 201 | Resource created |
-| 400 | Validation error |
+| 201 | Resource Created |
+| 400 | Validation Error |
 | 401 | Unauthorized |
 | 403 | Forbidden |
-| 404 | Resource not found |
-| 500 | Server error |
+| 404 | Resource Not Found |
+| 409 | Conflict |
+| 500 | Server Error |
 
 ### Prisma Error Mapping
 
 ```text
+P2002 → 409 Conflict
 P2025 → 404 Not Found
 ```
 
@@ -398,8 +424,11 @@ The backend currently supports:
 - Role-based access control
 - Full Client CRUD
 - Full Project CRUD
-- Secure password storage
+- Full Invoice CRUD
+- Invoice payment tracking
+- Client / Project / Invoice relationships
 - PostgreSQL persistence
+- Prisma ORM integration
 
 ---
 
@@ -416,33 +445,34 @@ The backend currently supports:
 ## 🧭 Development Method
 
 - Phase-based architecture
-- Backend-first design
+- Backend-first development
 - Schema-first database modeling
 - Service-layer architecture
 - Incremental Git commits
-- Manual API testing (PowerShell Invoke-RestMethod)
+- Manual API testing using PowerShell Invoke-RestMethod
 
 ---
 
-## 🚧 Next Phase — Phase 7
+## 🚧 Next Phase — Phase 8
 
-Invoice Management System
+Frontend Dashboard Integration
 
 Planned features:
 
-- Create invoices
-- Read invoices
-- Update invoices
-- Delete invoices
-- Invoice-to-client relationships
-- Payment status tracking
-- Invoice number generation
+- Authentication UI
+- Dashboard layout
+- Client pages
+- Project pages
+- Invoice pages
+- API integration layer
+- Protected frontend routes
+- Role-aware navigation
 
 ---
 
 ## 🧾 Project Status
 
-Current completed phases:
+Completed:
 
 - ✅ Phase 0 — Project Setup
 - ✅ Phase 1 — Express Foundation
@@ -451,7 +481,8 @@ Current completed phases:
 - ✅ Phase 4 — Authentication System
 - ✅ Phase 5 — Client Management System
 - ✅ Phase 6 — Project Management System
+- ✅ Phase 7 — Invoice Management System
 
-Next:
+Current Focus:
 
-➡️ Phase 7 — Invoice Management System
+➡️ Phase 8 — Frontend Dashboard Integration
